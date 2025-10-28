@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Golden Race: Mapping Olympic Excellence Across Nations</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>The Golden Race: Mapping Olympic Excellence Across Nations</h1>
+            <p class="subtitle">An Interactive Journey Through Medal Glory</p>
+        </header>
+
+        <div class="content">
+            <div class="intro">
+                <p>In the grand theater of international sports, few achievements shine brighter than Olympic gold. Each medal represents years of dedication, countless sacrifices, and the pinnacle of human athletic achievement. As nations compete on the world's greatest sporting stage, the gold medal count becomes more than just numbers—it's a testament to sporting culture, investment in athletics, and the indomitable human spirit.</p>
+                <p>Join us as we explore the geography of excellence, mapping the golden achievements of nations across continents and uncovering the stories behind the statistics.</p>
+            </div>
+
+            <h2>🌍 The Global Distribution of Gold</h2>
+            
+            <div class="map-container">
+                <div class="map-title">Interactive Olympic Gold Medal Map</div>
+                <p style="text-align: center; margin-bottom: 20px; color: #666; font-style: italic;">
+                    Reference: Official Olympic medal distribution visualization
+                </p>
+                <img src="images/olympic-reference-map.jpg" alt="Olympic Medal Distribution Map Reference" class="reference-image" onerror="this.style.display='none'">
+                <div id="mapViz"></div>
+                <div class="legend">
+                    <div class="legend-title">Circle Size = Number of Gold Medals</div>
+                    <div class="legend-item">
+                        <div class="legend-circle" style="width: 40px; height: 40px; background: rgba(255, 215, 0, 0.7);"></div>
+                        <span>Large circles: 30+ gold medals</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-circle" style="width: 25px; height: 25px; background: rgba(255, 215, 0, 0.7);"></div>
+                        <span>Medium circles: 10-29 gold medals</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-circle" style="width: 15px; height: 15px; background: rgba(255, 215, 0, 0.7);"></div>
+                        <span>Small circles: 1-9 gold medals</span>
+                    </div>
+                </div>
+            </div>
+
+            <p>The interactive map above reveals fascinating patterns in Olympic success. The concentration of larger circles in North America, Europe, and East Asia tells a story of established sporting powerhouses, while emerging circles across Africa, South America, and smaller nations showcase the democratization of Olympic excellence.</p>
+
+            <h2>🥇 The Podium of Nations</h2>
+
+            <div class="medal-podium">
+                <div class="podium-position position-2">
+                    <div class="podium-block">
+                        <div class="podium-country">🇨🇳 CHINA</div>
+                        <div class="podium-medals">39 Gold</div>
+                    </div>
+                </div>
+                <div class="podium-position position-1">
+                    <div class="podium-block">
+                        <div class="podium-country">🇺🇸 USA</div>
+                        <div class="podium-medals">40 Gold</div>
+                    </div>
+                </div>
+                <div class="podium-position position-3">
+                    <div class="podium-block">
+                        <div class="podium-country">🇯🇵 JAPAN</div>
+                        <div class="podium-medals">20 Gold</div>
+                    </div>
+                </div>
+            </div>
+
+            <h3>The American Dominance</h3>
+            <p>The United States continues its legacy as an Olympic superpower with <span class="highlight">40 gold medals</span>, narrowly edging out China.
