@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Golden Race: Mapping Olympic Excellence Across Nations</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Georgia', serif;
+            line-height: 1.8;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+
+        header {
+            background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+            padding: 60px 40px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        header::before {
+            content: '🥇';
+            position: absolute;
+            font-size: 200px;
+            opacity: 0.1;
+            top: -50px;
+            right: -50px;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+
+        h1 {
+            font-size: 3em;
+            color: #2c3e50;
+            margin-bottom: 15px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+            position: relative;
+            z-index: 1;
+        }
+
+        .subtitle {
+            font-size: 1.2em;
+            color: #555;
+            font-style: italic;
+            position: relative;
+            z-index: 1;
+        }
+
+        .content {
+            padding: 50px 40px;
+        }
+
+        .intro {
+            font-size: 1.2em;
+            color: #555;
+            margin-bottom: 40px;
+            padding: 30px;
+            background: linear-gradient(to right, #f8f9fa, #e9ecef);
+            border-left: 5px solid #FFD700;
+            border-radius: 5px;
+        }
+
+        h2 {
+            font-size: 2em;
+            color: #2c3e50;
+            margin: 40px 0 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #FFD700;
+        }
+
+        h3 {
+            font-size: 1.5em;
+            color: #34495e;
+            margin: 30px 0 15px;
+        }
+
+        p {
+            margin-bottom: 20px;
+            text-align: justify;
+        }
+
+        .map-container {
+            margin: 40px 0;
+            padding: 30px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            box-shadow: inset 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .map-title {
+            text-align: center;
+            font-size: 1.5em;
+            color: #2c3e50;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+
+        #mapViz {
+            width: 100%;
+            height: 600px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            background: white;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 25px;
+            border-radius: 10px;
+            text-align: center;
+            color: white;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            transition: transform 0.3s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .stat-number {
+            font-size: 2.5em;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .stat-label {
+            font-size: 1em;
+            opacity: 0.9;
+        }
+
+        .medal-podium {
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            gap: 20px;
+            margin: 40px 0;
+            height: 300px;
+        }
+
+        .podium-position {
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+        }
+
+        .podium-block {
+            background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+            padding: 30px 40px;
+            border-radius: 10px 10px 0 0;
+            box-shadow: 0 -5px 20px rgba(0,0,0,0.2);
+        }
+
+        .position-2 .podium-block { 
+            background: linear-gradient(135deg, #C0C0C0 0%, #A8A8A8 100%);
+            height: 200px;
+        }
+
+        .position-1 .podium-block { 
+            background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+            height: 250px;
+        }
+
+        .position-3 .podium-block { 
+            background: linear-gradient(135deg, #CD7F32 0%, #B87333 100%);
+            height: 150px;
+        }
+
+        .podium-country {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: white;
+            margin-bottom: 10px;
+        }
+
+        .podium-medals {
+            font-size: 2em;
+            color: white;
+            font-weight: bold;
+        }
+
+        .highlight {
+            background: linear-gradient(120deg, #FFD700 0%, #FFA500 100%);
+            padding: 2px 8px;
+            border-radius: 3px;
+            color: white;
+            font-weight: bold;
+        }
+
+        .legend {
+            background: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .legend-title {
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #2c3e50;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            margin: 5px 0;
+        }
+
+        .legend-circle {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            margin-right: 10px;
+            border: 2px solid #333;
+        }
+
+        footer {
+            background: #2c3e50;
+            color: white;
+            text-align: center;
+            padding: 30px;
+            font-size: 0.9em;
+        }
+
+        @media (max-width: 768px) {
+            h1 { font-size: 2em; }
+            .content { padding: 30px 20px; }
+            .medal-podium { flex-direction: column; height: auto; }
+            .podium-position { width: 100%; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>The Golden Race: Mapping Olympic Excellence Across Nations</h1>
+            <p class="subtitle">An Interactive Journey Through Medal Glory</p>
+        </header>
+
+        <div class="content">
+            <div class="intro">
+                <p>In the grand theater of international sports, few achievements shine brighter than Olympic gold. Each medal represents years of dedication, countless sacrifices, and the pinnacle of human athletic achievement. As nations compete on the world's greatest sporting stage, the gold medal count becomes more than just numbers—it's a testament to sporting culture, investment in athletics, and the indomitable human spirit.</p>
+                <p>Join us as we explore the geography of excellence, mapping the golden achievements of nations across continents and uncovering the stories behind the statistics.</p>
+            </div>
+
+            <h2>🌍 The Global Distribution of Gold</h2>
+            
+            <div class="map-container">
+                <div class="map-title">Interactive Olympic Gold Medal Map</div>
+                <p style="text-align: center; margin-bottom: 20px; color: #666; font-style: italic;">
+                    Reference: Official Olympic medal distribution visualization
+                </p>
+                <img src="https://i.imgur.com/placeholder.jpg" alt="Olympic Medal Distribution Map Reference" style="width: 100%; border-radius: 8px; margin-bottom: 20px; border: 2px solid #ddd;" onerror="this.style.display='none'">
+                <div id="mapViz"></div>
+                <div class="legend">
+                    <div class="legend-title">Circle Size = Number of Gold Medals</div>
+                    <div class="legend-item">
+                        <div class="legend-circle" style="width: 40px; height: 40px; background: rgba(255, 215, 0, 0.7);"></div>
+                        <span>Large circles: 30+ gold medals</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-circle" style="width: 25px; height: 25px; background: rgba(255, 215, 0, 0.7);"></div>
+                        <span>Medium circles: 10-29 gold medals</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-circle" style="width: 15px; height: 15px; background: rgba(255, 215, 0, 0.7);"></div>
+                        <span>Small circles: 1-9 gold medals</span>
+                    </div>
+                </div>
+            </div>
+
+            <p>The interactive map above reveals fascinating patterns in Olympic success. The concentration of larger circles in North America, Europe, and East Asia tells a story of established sporting powerhouses, while emerging circles across Africa, South America, and smaller nations showcase the democratization of Olympic excellence.</p>
+
+            <h2>🥇 The Podium of Nations</h2>
+
+            <div class="medal-podium">
+                <div class="podium-position position-2">
+                    <div class="podium-block">
+                        <div class="podium-country">🇨🇳 CHINA</div>
+                        <div class="podium-medals">39 Gold</div>
+                    </div>
+                </div>
+                <div class="podium-position position-1">
+                    <div class="podium-block">
+                        <div class="podium-country">🇺🇸 USA</div>
+                        <div class="podium-medals">40 Gold</div>
+                    </div>
+                </div>
+                <div class="podium-position position-3">
+                    <div class="podium-block">
+                        <div class="podium-country">🇯🇵 JAPAN</div>
+                        <div class="podium-medals">20 Gold</div>
+                    </div>
+                </div>
+            </div>
+
+            <h3>The American Dominance</h3>
+            <p>The United States continues its legacy as an Olympic superpower with <span class="highlight">40 gold medals</span>, narrowly edging out China. This success reflects decades of investment in sports infrastructure, collegiate athletic programs, and a culture that celebrates sporting excellence. From swimming pools to basketball courts, American athletes have consistently delivered on the world's biggest stage.</p>
+
+            <h3>China's Rising Force</h3>
+            <p>Close behind with <span class="highlight">39 gold medals</span>, China represents the meteoric rise of a sporting nation. Since seriously investing in Olympic sports programs, China has transformed from a regional competitor to a global powerhouse, particularly excelling in diving, gymnastics, table tennis, and weightlifting.</p>
+
+            <h3>Japan's Home Advantage</h3>
+            <p>Rounding out the top three, Japan secured <span class="highlight">20 gold medals</span>, demonstrating the strength of hosting nations and their traditional excellence in martial arts, gymnastics, and emerging sports like skateboarding and sport climbing.</p>
+
+            <h2>📊 Breaking Down the Numbers</h2>
+
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number">91</div>
+                    <div class="stat-label">Nations Won Gold</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">337</div>
+                    <div class="stat-label">Total Gold Medals</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">6</div>
+                    <div class="stat-label">Continents Represented</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">27</div>
+                    <div class="stat-label">First-Time Gold Winners</div>
+                </div>
+            </div>
+
+            <h2>🌟 Regional Excellence</h2>
+
+            <h3>European Powerhouses</h3>
+            <p>Europe showcases remarkable depth with multiple nations in the top rankings. Great Britain (14 gold), France (16 gold), and the Netherlands (15 gold) demonstrate that Olympic success isn't limited to the largest nations. These countries punch well above their weight, leveraging strong sporting traditions, government funding, and grassroots development programs.</p>
+
+            <h3>The Asia-Pacific Surge</h3>
+            <p>Beyond the top three, Australia's impressive <span class="highlight">18 gold medals</span> and South Korea's 13 golds highlight the strength of the Asia-Pacific region. Australia's success in swimming and rowing, combined with Korea's dominance in archery and taekwondo, showcases specialized excellence that comes from focused investment in specific sports.</p>
+
+            <h3>Emerging Nations Making History</h3>
+            <p>Perhaps the most inspiring stories come from nations winning their first or few Olympic golds. Countries like Saint Lucia, Dominica, and Pakistan celebrated historic moments, proving that Olympic dreams know no boundaries. These breakthrough performances inspire entire nations and demonstrate that with dedication and opportunity, any country can reach the podium.</p>
+
+            <h2>🔍 Patterns of Success</h2>
+
+            <p>Analyzing the data reveals several key factors behind Olympic success:</p>
+
+            <p><strong>Population and Resources:</strong> While not everything, larger populations and greater economic resources clearly correlate with medal counts. The USA, China, and Japan benefit from massive talent pools and significant sports budgets.</p>
+
+            <p><strong>Sporting Culture:</strong> Nations with strong sporting traditions consistently perform well. Countries like the Netherlands excel in cycling and speed skating due to cultural emphasis and excellent facilities.</p>
+
+            <p><strong>Strategic Specialization:</strong> Smaller nations often achieve success by focusing on specific sports. New Zealand's 10 golds came largely from rowing and cycling, sports that match their geography and culture.</p>
+
+            <p><strong>Government Investment:</strong> Countries that treat Olympic success as a national priority, providing funding, facilities, and systematic athlete development programs, consistently outperform their size and economic indicators.</p>
+
+            <h2>💭 The Human Stories Behind the Statistics</h2>
+
+            <p>Behind every gold medal on this map lies a human story of triumph. There's the athlete who trained in makeshift facilities, the coach who believed when others doubted, the family that sacrificed everything for a dream. When Uzbekistan earned 8 gold medals, it represented a nation investing in its youth. When Botswana won its first gold, an entire country erupted in celebration.</p>
+
+            <p>These medals represent more than athletic achievement—they symbolize hope, perseverance, and the universal language of sport that unites our world.</p>
+
+            <h2>🎯 Looking Forward</h2>
+
+            <p>As we look toward future Olympics, the trends are clear: the geography of excellence continues to expand. More nations are investing in sports, more athletes from diverse backgrounds are reaching the podium, and the competition grows fiercer each Olympic cycle.</p>
+
+            <p>The map of gold medals isn't static—it's a living document that changes with each Games, reflecting the evolving landscape of global sports. Today's emerging nations become tomorrow's powerhouses, and today's powerhouses must continually innovate to maintain their positions.</p>
+
+            <div class="intro" style="margin-top: 40px;">
+                <p><strong>The pursuit of gold isn't just about winning medals—it's about pushing the boundaries of human potential, inspiring the next generation, and proving that with dedication and support, excellence can emerge from anywhere on Earth.</strong></p>
+            </div>
+        </div>
+
+        <footer>
+            <p>Data visualized from Olympic Games statistics | Circle sizes proportional to gold medal counts</p>
+            <p style="margin-top: 10px;">🏅 Celebrating human excellence across all nations 🏅</p>
+        </footer>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.8.5/d3.min.js"></script>
+    <script>
+        const olympicData = [
+            {code: "USA", country: "United States", gold: 40, lat: 37.0902, lon: -95.7129},
+            {code: "CHN", country: "China", gold: 39, lat: 35.8617, lon: 104.1954},
+            {code: "JPN", country: "Japan", gold: 20, lat: 36.2048, lon: 138.2529},
+            {code: "AUS", country: "Australia", gold: 18, lat: -25.2744, lon: 133.7751},
+            {code: "FRA", country: "France", gold: 16, lat: 46.2276, lon: 2.2137},
+            {code: "NED", country: "Netherlands", gold: 15, lat: 52.1326, lon: 5.2913},
+            {code: "GBR", country: "Great Britain", gold: 14, lat: 55.3781, lon: -3.4360},
+            {code: "KOR", country: "South Korea", gold: 13, lat: 35.9078, lon: 127.7669},
+            {code: "ITA", country: "Italy", gold: 12, lat: 41.8719, lon: 12.5674},
+            {code: "GER", country: "Germany", gold: 11, lat: 51.1657, lon: 10.4515},
+            {code: "NZL", country: "New Zealand", gold: 10, lat: -40.9006, lon: 174.8860},
+            {code: "CAN", country: "Canada", gold: 9, lat: 56.1304, lon: -106.3468},
+            {code: "UZB", country: "Uzbekistan", gold: 8, lat: 41.3775, lon: 64.5853},
+            {code: "HUN", country: "Hungary", gold: 6, lat: 47.1625, lon: 19.5033},
+            {code: "ESP", country: "Spain", gold: 5, lat: 40.4637, lon: -3.7492},
+            {code: "SWE", country: "Sweden", gold: 4, lat: 60.1282, lon: 18.6435},
+            {code: "KEN", country: "Kenya", gold: 4, lat: -0.0236, lon: 37.9062},
+            {code: "NOR", country: "Norway", gold: 4, lat: 60.4720, lon: 8.4689},
+            {code: "IRL", country: "Ireland", gold: 4, lat: 53.4129, lon: -8.2439},
+            {code: "BRA", country: "Brazil", gold: 3, lat: -14.2350, lon: -51.9253},
+            {code: "IRI", country: "Iran", gold: 3, lat: 32.4279, lon: 53.6880},
+            {code: "UKR", country: "Ukraine", gold: 3, lat: 48.3794, lon: 31.1656},
+            {code: "ROU", country: "Romania", gold: 3, lat: 45.9432, lon: 24.9668},
+            {code: "GEO", country: "Georgia", gold: 3, lat: 42.3154, lon: 43.3569},
+            {code: "SRB", country: "Serbia", gold: 3, lat: 44.0165, lon: 21.0059},
+            {code: "BUL", country: "Bulgaria", gold: 3, lat: 42.7339, lon: 25.4858},
+            {code: "CZE", country: "Czech Republic", gold: 3, lat: 49.8175, lon: 15.4730},
+            {code: "DEN", country: "Denmark", gold: 2, lat: 56.2639, lon: 9.5018},
+            {code: "AZE", country: "Azerbaijan", gold: 2, lat: 40.1431, lon: 47.5769},
+            {code: "CRO", country: "Croatia", gold: 2, lat: 45.1, lon: 15.2},
+            {code: "CUB", country: "Cuba", gold: 2, lat: 21.5218, lon: -77.7812},
+            {code: "BEL", country: "Belgium", gold: 2, lat: 50.5039, lon: 4.4699},
+            {code: "BRN", country: "Bahrain", gold: 2, lat: 26.0667, lon: 50.5577},
+            {code: "SLO", country: "Slovenia", gold: 2, lat: 46.1512, lon: 14.9955},
+            {code: "TPE", country: "Chinese Taipei", gold: 2, lat: 23.6978, lon: 120.9605},
+            {code: "AUT", country: "Austria", gold: 2, lat: 47.5162, lon: 14.5501},
+            {code: "HKG", country: "Hong Kong", gold: 2, lat: 22.3193, lon: 114.1694},
+            {code: "PHI", country: "Philippines", gold: 2, lat: 12.8797, lon: 121.7740},
+            {code: "ALG", country: "Algeria", gold: 2, lat: 28.0339, lon: 1.6596},
+            {code: "INA", country: "Indonesia", gold: 2, lat: -0.7893, lon: 113.9213},
+            {code: "POL", country: "Poland", gold: 1, lat: 51.9194, lon: 19.1451},
+            {code: "ISR", country: "Israel", gold: 1, lat: 31.0461, lon: 34.8516},
+            {code: "KAZ", country: "Kazakhstan", gold: 1, lat: 48.0196, lon: 66.9237},
+            {code: "JAM", country: "Jamaica", gold: 1, lat: 18.1096, lon: -77.2975},
+            {code: "RSA", country: "South Africa", gold: 1, lat: -30.5595, lon: 22.9375},
+            {code: "THA", country: "Thailand", gold: 1, lat: 15.8700, lon: 100.9925},
+            {code: "ETH", country: "Ethiopia", gold: 1, lat: 9.1450, lon: 40.4897},
+            {code: "SUI", country: "Switzerland", gold: 1, lat: 46.8182, lon: 8.2275},
+            {code: "ECU", country: "Ecuador", gold: 1, lat: -1.8312, lon: -78.1834},
+            {code: "POR", country: "Portugal", gold: 1, lat: 39.3999, lon: -8.2245},
+            {code: "GRE", country: "Greece", gold: 1, lat: 39.0742, lon: 21.8243},
+            {code: "ARG", country: "Argentina", gold: 1, lat: -38.4161, lon: -63.6167},
+            {code: "EGY", country: "Egypt", gold: 1, lat: 26.8206, lon: 30.8025},
+            {code: "TUN", country: "Tunisia", gold: 1, lat: 33.8869, lon: 9.5375},
+            {code: "BOT", country: "Botswana", gold: 1, lat: -22.3285, lon: 24.6849},
+            {code: "CHI", country: "Chile", gold: 1, lat: -35.6751, lon: -71.5430},
+            {code: "LCA", country: "Saint Lucia", gold: 1, lat: 13.9094, lon: -60.9789},
+            {code: "UGA", country: "Uganda", gold: 1, lat: 1.3733, lon: 32.2903},
+            {code: "DOM", country: "Dominican Republic", gold: 1, lat: 18.7357, lon: -70.1627},
+            {code: "GUA", country: "Guatemala", gold: 1, lat: 15.7835, lon: -90.2308},
+            {code: "MAR", country: "Morocco", gold: 1, lat: 31.7917, lon: -7.0926},
+            {code: "DMA", country: "Dominica", gold: 1, lat: 15.4150, lon: -61.3710},
+            {code: "PAK", country: "Pakistan", gold: 1, lat: 30.3753, lon: 69.3451}
+        ];
+
+        const width = document.getElementById('mapViz').clientWidth;
+        const height = 600;
+
+        const svg = d3.select("#mapViz")
+            .append("svg")
+            .attr("width", width)
+            .attr("height", height);
+
+        const projection = d3.geoMercator()
+            .scale(130)
+            .translate([width / 2, height / 1.5]);
+
+        const path = d3.geoPath().projection(projection);
+
+        const radiusScale = d3.scaleSqrt()
+            .domain([0, d3.max(olympicData, d => d.gold)])
+            .range([3, 35]);
+
+        d3.json("https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json").then(world => {
+            const countries = topojson.feature(world, world.objects.countries);
+
+            svg.append("g")
+                .selectAll("path")
+                .data(countries.features)
+                .enter().append("path")
+                .attr("d", path)
+                .attr("fill", "#e0e0e0")
+                .attr("stroke", "#999")
+                .attr("stroke-width", 0.5);
+
+            const tooltip = d3.select("body").append("div")
+                .style("position", "absolute")
+                .style("background", "rgba(0,0,0,0.8)")
+                .style("color", "white")
+                .style("padding", "10px")
+                .style("border-radius", "5px")
+                .style("pointer-events", "none")
+                .style("opacity", 0)
+                .style("font-size", "14px");
+
+            svg.selectAll("circle")
+                .data(olympicData)
+                .enter().append("circle")
+                .attr("cx", d => {
+                    const coords = projection([d.lon, d.lat]);
+                    return coords ? coords[0] : 0;
+                })
+                .attr("cy", d => {
+                    const coords = projection([d.lon, d.lat]);
+                    return coords ? coords[1] : 0;
+                })
+                .attr("r", d => radiusScale(d.gold))
+                .attr("fill", "rgba(255, 215, 0, 0.7)")
+                .attr("stroke", "#DAA520")
+                .attr("stroke-width", 2)
+                .on("mouseover", function(event, d) {
+                    d3.select(this)
+                        .attr("fill", "rgba(255, 215, 0, 1)")
+                        .attr("stroke-width", 3);
+                    
+                    tooltip.transition().duration(200).style("opacity", 1);
+                    tooltip.html(`<strong>${d.country}</strong><br/>🥇 ${d.gold} Gold Medals`)
+                        .style("left", (event.pageX + 10) + "px")
+                        .style("top", (event.pageY - 28) + "px");
+                })
+                .on("mouseout", function() {
+                    d3.select(this)
+                        .attr("fill", "rgba(255, 215, 0, 0.7)")
+                        .attr("stroke-width", 2);
+                    
+                    tooltip.transition().duration(200).style("opacity", 0);
+                })
+                .style("cursor", "pointer");
+        });
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/topojson/3.0.2/topojson.min.js"></script>
+</body>
+</html>
